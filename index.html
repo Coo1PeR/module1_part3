@@ -6,7 +6,7 @@
     <title>Gallery</title>
   </head>
   <body>
-    <div class="registration">
+    <section class="registration">
       <h3>Authorization</h3>
       <form action="https://hjdjs55gol.execute-api.us-east-1.amazonaws.com/api/login" method="post" name="login">
         <div>
@@ -21,7 +21,15 @@
           <input type="button" class="btnLogin" value="Log in">
         </div>
       </form>
-    </div>
+    </section>
+    <section class="gallery">
+      <h3>Gallery</h3>
+      <div>
+        <input type="button" class="previos" value="<">
+        <input type="button" class="btnShowGallery" value="Show gallery">
+        <input type="button" class="next" value=">">
+      </div>
+      <div id='imgs'></div>
     <script src="./script.js"></script>
   </body>
 </html>
