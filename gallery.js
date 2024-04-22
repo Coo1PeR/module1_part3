@@ -8,9 +8,11 @@ const btnPages = document.querySelectorAll('#pages');
 // Will be recorded in the getGallery
 let currentPage = 1;
 let maxPage;
+let currentUrl = new URL(window.location);
 
 async function getGallery(i) {
   try {
+    cleanGallery();
     const responseGallery = await fetch(
       `https://hjdjs55gol.execute-api.us-east-1.amazonaws.com/api/gallery?page=${i}`,
       {
@@ -24,6 +26,9 @@ async function getGallery(i) {
     currentPage = resultGallery.page;
     maxPage = resultGallery.total;
     localStorage.setItem('page', resultGallery.page);
+
+    currentUrl = new URL(`${window.location}gallery?page=${i}`);
+    console.log(currentUrl);
 
     console.log(resultGallery);
 
@@ -43,8 +48,8 @@ async function getGallery(i) {
   }
 }
 
-const btnShowGalleryEL = btnShowGallery.addEventListener('click', e => {
-  e.preventDefault();
+btnShowGallery.addEventListener('click', element => {
+  element.preventDefault();
 
   if (localStorage.getItem('token')) {
     getGallery(localStorage.getItem('page') || currentPage);
@@ -52,20 +57,18 @@ const btnShowGalleryEL = btnShowGallery.addEventListener('click', e => {
 });
 
 function cleanGallery() {
-  document.querySelectorAll('#img').forEach(el => el.remove());
+  document.querySelectorAll('#img').forEach(element => element.remove());
 }
 
-const btnNextEL = btnNext.addEventListener('click', e => {
-  e.preventDefault();
+btnNext.addEventListener('click', element => {
+  element.preventDefault();
 
-  cleanGallery();
   nextPage();
 });
 
-const btnPrevEL = btnPrev.addEventListener('click', e => {
-  e.preventDefault();
+btnPrev.addEventListener('click', element => {
+  element.preventDefault();
 
-  cleanGallery();
   prevPage();
 });
 
@@ -96,25 +99,10 @@ function reloadPage() {
   }
 }
 
-btnPages.forEach(el => {
-  el.addEventListener('click', e => {
-    (e.onclick = cleanGallery()), getGallery(el.innerHTML);
+btnPages.forEach(element => {
+  element.addEventListener('click', () => {
+    getGallery(element.innerHTML);
   });
 });
 
-export {
-  btnShowGallery,
-  btnPrev,
-  btnNext,
-  getGallery,
-  btnShowGalleryEL,
-  cleanGallery,
-  btnNextEL,
-  btnPrevEL,
-  nextPage,
-  prevPage,
-  reloadPage,
-  currentPage,
-  maxPage,
-  btnPages,
-};
+export {};

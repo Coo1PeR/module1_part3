@@ -35,8 +35,8 @@ async function login(user) {
   }
 }
 
-const loginES = btnLogin.addEventListener('click', e => {
-  e.preventDefault();
+btnLogin.addEventListener('click', element => {
+  element.preventDefault();
 
   const passwordValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,8}$/;
 
@@ -55,11 +55,4 @@ const loginES = btnLogin.addEventListener('click', e => {
   login(user);
 });
 
-export {
-  clearLocalStorage,
-  login,
-  btnLogin,
-  TOKEN_KEY,
-  TOKEN_LIFE_TIME,
-  loginES,
-};
+export {};
