@@ -28,11 +28,10 @@ async function login(user) {
       localStorage.setItem(TOKEN_KEY, resultToken);
       setTimeout(clearLocalStorage, TOKEN_LIFE_TIME);
 
-      //alert('You have successfully logged in!');
+      alert('You have successfully logged in!');
     }
   } catch (error) {
     alert(error);
-    //console.error('Error:', error);
   }
 }
 
@@ -41,11 +40,8 @@ const loginES = btnLogin.addEventListener('click', e => {
 
   const passwordValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,8}$/;
 
-  const mail = 'vkotikov@flo.team';
-  const password = 'po3FGas8';
-
-  // const mail = document.getElementById('email').value;
-  // const password = document.getElementById('password').value;
+  const mail = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
 
   if (!passwordValid.test(password)) {
     return alert('Password is not valid');
@@ -56,7 +52,6 @@ const loginES = btnLogin.addEventListener('click', e => {
     password: password,
   };
 
-  //console.log(JSON.stringify(user));
   login(user);
 });
 
