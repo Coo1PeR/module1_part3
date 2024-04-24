@@ -1,14 +1,14 @@
 ///////////////////////////////////////
 // Gallery
 const btnShowGallery = document.querySelector('.btnShowGallery');
-const btnPrev = document.querySelector('.previos');
+const btnPrev = document.querySelector('.previous');
 const btnNext = document.querySelector('.next');
-const btnPages = document.querySelectorAll('#pages');
+const btnPages = document.querySelector('#pages').querySelectorAll('button');
 
 // Will be recorded in the getGallery
 let currentPage = 1;
 let maxPage;
-let currentUrl = new URL(window.location);
+//let currentUrl = new URL(window.location);
 
 async function getGallery(i) {
   try {
@@ -35,7 +35,7 @@ async function getGallery(i) {
     images.forEach(src => {
       const img = document.createElement('img');
       img.src = src;
-      img.width = '300';
+      img.width = 300;
       img.id = 'img';
 
       document.querySelector('#imgs').append(img);
