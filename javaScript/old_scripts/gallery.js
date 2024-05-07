@@ -1,16 +1,18 @@
 ///////////////////////////////////////
 // Gallery
 const btnShowGallery = document.querySelector('.btnShowGallery');
-const btnPrev = document.querySelector('.previos');
+const btnPrev = document.querySelector('.previous');
 const btnNext = document.querySelector('.next');
-const btnPages = document.querySelectorAll('#pages');
+const btnPages = document.querySelector('#pages').querySelectorAll('button');
 
 // Will be recorded in the getGallery
 let currentPage = 1;
 let maxPage;
+//let currentUrl = new URL(window.location);
 
 async function getGallery(i) {
   try {
+    cleanGallery();
     const responseGallery = await fetch(
       `https://hjdjs55gol.execute-api.us-east-1.amazonaws.com/api/gallery?page=${i}`,
       {
@@ -25,7 +27,7 @@ async function getGallery(i) {
     maxPage = resultGallery.total;
     localStorage.setItem('page', resultGallery.page);
 
-    console.log(resultGallery);
+    updateURLParams();
 
     // Rendering images
     const images = resultGallery.objects;
@@ -33,18 +35,20 @@ async function getGallery(i) {
     images.forEach(src => {
       const img = document.createElement('img');
       img.src = src;
-      img.width = '300';
+      img.width = 300;
       img.id = 'img';
 
       document.querySelector('#imgs').append(img);
     });
   } catch (error) {
-    alert(error);
+    alert(`Error:${error}`);
+    localStorage.setItem('page', 1);
+    getGallery(1);
   }
 }
 
-const btnShowGalleryEL = btnShowGallery.addEventListener('click', e => {
-  e.preventDefault();
+btnShowGallery.addEventListener('click', element => {
+  element.preventDefault();
 
   if (localStorage.getItem('token')) {
     getGallery(localStorage.getItem('page') || currentPage);
@@ -52,20 +56,18 @@ const btnShowGalleryEL = btnShowGallery.addEventListener('click', e => {
 });
 
 function cleanGallery() {
-  document.querySelectorAll('#img').forEach(el => el.remove());
+  document.querySelectorAll('#img').forEach(element => element.remove());
 }
 
-const btnNextEL = btnNext.addEventListener('click', e => {
-  e.preventDefault();
+btnNext.addEventListener('click', element => {
+  element.preventDefault();
 
-  cleanGallery();
   nextPage();
 });
 
-const btnPrevEL = btnPrev.addEventListener('click', e => {
-  e.preventDefault();
+btnPrev.addEventListener('click', element => {
+  element.preventDefault();
 
-  cleanGallery();
   prevPage();
 });
 
@@ -96,25 +98,33 @@ function reloadPage() {
   }
 }
 
-btnPages.forEach(el => {
-  el.addEventListener('click', e => {
-    (e.onclick = cleanGallery()), getGallery(el.innerHTML);
+btnPages.forEach(element => {
+  element.addEventListener('click', () => {
+    getGallery(element.innerHTML);
   });
 });
 
-export {
-  btnShowGallery,
-  btnPrev,
-  btnNext,
-  getGallery,
-  btnShowGalleryEL,
-  cleanGallery,
-  btnNextEL,
-  btnPrevEL,
-  nextPage,
-  prevPage,
-  reloadPage,
-  currentPage,
-  maxPage,
-  btnPages,
+// get value from URL
+function getPageParameter() {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  return urlParams.get('page');
+}
+
+// handle page load event
+window.onload = function () {
+  const pageNumber = getPageParameter();
+  if (pageNumber !== null) {
+    getGallery(pageNumber);
+  }
 };
+
+// generate new url
+function updateURLParams() {
+  const params = new URLSearchParams(window.location.search);
+  params.set('page', currentPage);
+  const newUrl = `${window.location.pathname}?${params.toString()}`;
+  window.history.pushState({}, '', newUrl);
+}
+
+export {};

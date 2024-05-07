@@ -1,14 +1,19 @@
-const TOKEN_KEY = 'token'; // expected token
-const TOKEN_LIFE_TIME = 10 * 60 * 1000; // 10 minutes
+const TOKEN_KEY: string = 'token'; // expected token
+const TOKEN_LIFE_TIME: number = 10 * 60 * 1000; // 10 minutes
 
-const btnLogin = document.querySelector('.btnLogin');
+const btnLogin: HTMLElement = document.querySelector('.btnLogin');
 
 function clearLocalStorage() {
   localStorage.removeItem(TOKEN_KEY);
   location.reload();
 }
 
-async function login(user) {
+interface User {
+  email: string;
+  password: string;
+}
+
+async function login(user: User) {
   try {
     const responseLogin = await fetch(
       'https://hjdjs55gol.execute-api.us-east-1.amazonaws.com/api/login',
@@ -35,19 +40,19 @@ async function login(user) {
   }
 }
 
-const loginES = btnLogin.addEventListener('click', e => {
-  e.preventDefault();
+btnLogin.addEventListener('click', element => {
+  element.preventDefault();
 
-  const passwordValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,8}$/;
+  const passwordValid: RegExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8}$/;
 
-  const mail = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+  const mail: string = (document.getElementById('email') as HTMLInputElement).value;
+  const password: string = (document.getElementById('password') as HTMLInputElement).value;
 
   if (!passwordValid.test(password)) {
     return alert('Password is not valid');
   }
 
-  const user = {
+  const user: User = {
     email: mail,
     password: password,
   };
@@ -55,11 +60,4 @@ const loginES = btnLogin.addEventListener('click', e => {
   login(user);
 });
 
-export {
-  clearLocalStorage,
-  login,
-  btnLogin,
-  TOKEN_KEY,
-  TOKEN_LIFE_TIME,
-  loginES,
-};
+export {};
